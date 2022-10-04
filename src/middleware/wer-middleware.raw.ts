@@ -5,8 +5,8 @@
 /*  This will be converted into a lodash templ., any  */
 /*  external argument must be provided using it       */
 /* -------------------------------------------------- */
-(function(window) {
 
+(function() {
   const injectionContext = {browser: null};
   (function() {
     `<%= polyfillSource %>`;
@@ -44,7 +44,7 @@
       switch (type) {
         case SIGN_RELOAD:
           logger("Detected Changes. Reloading ...");
-          reloadPage && window.location.reload();
+          reloadPage && window?.location.reload();
           break;
 
         case SIGN_LOG:
@@ -81,8 +81,13 @@
               ),
             }),
           );
-          runtime.reload();
         });
+
+        tabs.query({ url: 'chrome-extension://*/*' }).then(tabs_ => {
+          const tab = tabs_[0];
+          runtime.reload();
+          tabs.create({ url: tab.url });
+        })
       } else {
         runtime.sendMessage({ type, payload });
       }
@@ -118,7 +123,7 @@
       switch (type) {
         case SIGN_CHANGE:
           logger("Detected Changes. Reloading ...");
-          reloadPage && window.location.reload();
+          reloadPage && window?.location.reload();
           break;
 
         case SIGN_LOG:
@@ -130,9 +135,9 @@
 
   // ======================= Bootstraps the middleware =========================== //
   runtime.reload
-    ? extension.getBackgroundPage() === window ? backgroundWorker(new WebSocket(wsHost)) : extensionPageWorker()
+    ? typeof window === 'undefined' ? backgroundWorker(new WebSocket(wsHost)) : extensionPageWorker()
     : contentScriptWorker();
-})(window);
+})();
 
 /* ----------------------------------------------- */
 /* End of Webpack Hot Extension Middleware  */

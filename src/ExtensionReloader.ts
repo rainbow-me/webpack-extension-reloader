@@ -88,6 +88,10 @@ export default class ExtensionReloaderImpl extends AbstractPluginReloader
         )
       : entries;
 
+    if (entries.extensionPage) {
+      parsedEntries.extensionPage = entries.extensionPage;
+    }
+
     this._eventAPI = new CompilerEventsFacade(compiler);
     this._injector = middlewareInjector(parsedEntries, { port, reloadPage });
     this._triggerer = changesTriggerer(port, reloadPage);

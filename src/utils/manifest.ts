@@ -21,11 +21,11 @@ export function extractEntries(
     throw new Error();
   }
 
-  if (!background?.scripts) {
+  if (!background?.service_worker) {
     throw new TypeError(bgScriptManifestRequiredMsg.get());
   }
 
-  const bgScriptFileNames = background.scripts;
+  const bgScriptFileNames = [background.service_worker];
   const toRemove = (filename as string).replace("[name]", "");
 
   const bgWebpackEntry = Object.keys(webpackEntry).find(entryName =>

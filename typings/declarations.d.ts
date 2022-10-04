@@ -71,8 +71,7 @@ declare interface IExtensionManifest {
   name: string;
   version: string;
   background?: {
-    page?: string;
-    scripts?: string[];
+    service_worker?: string;
   };
   icons?: {
     [key: string]: string;
